@@ -5,7 +5,34 @@ This project rebuilds my 2021 term project at IIT Kharagpur (supervisor: Dr. Deb
 
 The rebuild asks a model-validation question: **the day's low and number of trades are only known after the close, so is that model really forecasting?**
 
-> 📊 **Results:** *pending the run on NSE data*
+## Key findings
+**The original model's advantage was look-ahead bias.** Using the same day's low, the multiple regression halves the error of a random walk. A placebo test on simulated stocks, where nothing is predictable, gives the same "win," which proves the edge comes from information a forecaster wouldn't have yet. With yesterday's values instead, the advantage disappears. The opening price, which is known at 9:15 am, gives a small but legitimate gain.
+
+**28 NSE stocks, test period 17 Mar – 18 Apr 2021 (20 trading days each)**
+
+| Model | Uses future info? | Median MAPE | Beats random walk | Significantly (DM, 5%) |
+|---|---|---|---|---|
+| Random walk (benchmark) | No | 1.98% | — | — |
+| Simple: previous close | No | 1.96% | 19 / 28 | 3 |
+| **Same-day (original)**: + day's low, trades | **Yes** ⚠️ | 0.98% | 28 / 28 | 14 |
+| Lagged (fixed): + *yesterday's* low, trades | No | 2.00% | 13 / 28 | 0 |
+| **At-open (fixed)**: + today's open | No | **1.75%** | **26 / 28** | 4 |
+| *Placebo: same-day model on unpredictable fake stocks* | *Yes* | *0.89% vs 1.64%* | *30 / 30* | *25* |
+
+![Model comparison](results/figures/model_comparison.png)
+
+**Other findings**
+- **Multicollinearity:** the six price variables have median VIFs between about 280 and 2,800. That's why the original project dropped most of them. Even previous close and day low together still have VIFs around 80.
+- **The simple regression is a random walk:** its median slope is 0.994.
+- **Misses are stock-specific:** JSW Steel, IDFC First Bank and Tata Steel had the lowest interval coverage. IDFC First Bank's weak result matches the original report's explanation, the March 2021 QIP share sale.
+
+<details>
+<summary>Example: IDFC First Bank over the test month</summary>
+
+![IDFC First Bank](results/figures/example_stock.png)
+</details>
+
+**Data notes.** 29 of the 30 original stocks downloaded. Jet Airways traded only in the restricted BZ segment while suspended, so it has no regular data. Mrs Bectors Food listed in Dec 2020, so it has only 56 training days and was excluded (the minimum is 60). Full per-stock results are in `results/per_stock_scores.csv`.
 
 ## What's inside
 | Step | Details |

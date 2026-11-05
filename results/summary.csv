@@ -1,0 +1,6 @@
+model,stocks,median_MAPE_%,mean_coverage_%,stocks_with_coverage_>=90%,median_interval_width_%,stocks_beating_RW,stocks_sig_better_than_RW,uses_future_info
+Random walk,28,1.9752618778264748,89.10714285714286,19,8.183024787440328,,,False
+Simple (original),28,1.9552293288845508,89.46428571428571,19,8.285767842066235,19.0,3.0,False
+Same-day (original),28,0.9837556303987222,92.32142857142857,22,4.597114258369942,28.0,14.0,True
+Lagged (fixed),28,2.002535464607451,90.0,19,8.245273787049605,13.0,0.0,False
+At-open (fixed),28,1.7489473694985185,90.71428571428571,20,7.49234888764272,26.0,4.0,False
